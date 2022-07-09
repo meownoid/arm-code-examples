@@ -45,14 +45,12 @@ def main(register: str, value: int):
 
     for shift in [0, 16, 32, 48]:
         suffix = "z" if shift == 0 else "k"
-        v = (value & mask << shift) >> shift
 
+        v = (value & mask << shift) >> shift
         if v == 0 and shift > 0:
             continue
 
-        lsl = "" if shift == 0 else f", LSL #{shift}"
-
-        print(f"mov{suffix} {register}, #0x{v:X}{lsl}")
+        print(f"mov{suffix} {register}, #0x{v:X}, LSL #{shift:02d}")
 
 
 if __name__ == "__main__":
