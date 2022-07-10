@@ -7,10 +7,10 @@ endif
 SOURCE_FILES = $(wildcard *.s)
 OBJECT_FILES = $(patsubst %.s,bin/%.o,$(SOURCE_FILES))
 
-all: bin/upper-case-fun
+all: bin/upper-case-function
 
-bin/upper-case-fun: $(OBJECT_FILES)
-	ld -o bin/upper-case-fun $(OBJECT_FILES) -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` -e _start
+bin/upper-case-function: $(OBJECT_FILES)
+	ld -o bin/upper-case-function $(OBJECT_FILES) -lSystem -syslibroot `xcrun -sdk macosx --show-sdk-path` -e _start
 
 bin/%.o : %.s bin
 	as $(DEBUG_FLAGS) $< -o $@
