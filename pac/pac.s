@@ -49,7 +49,6 @@ fn_3:
     svc #0x80
 
 
-
 .align 4
 msg_1: .ascii "fn_1\n"
 .align 4
