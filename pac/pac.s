@@ -19,12 +19,12 @@ fn_1:
     mov X2, #5
     mov X16, #4
     svc #0x80
-    autib LR, SP         // same as retab
+    autib LR, SP         // same as retab if ret is after it
                          // authenticate LR using SP as a nonce
     ret
 
 fn_2:
-    // prints its name and returns
+    // prints its name, modifies LR to point to fn_3, and returns
 
     pacibsp              // sign LR using SP as a nonce
     mov X0, #1
