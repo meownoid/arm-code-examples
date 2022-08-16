@@ -14,10 +14,11 @@ _start:
     add X2, X2, INPUT_ERROR_SIZE@PAGEOFF
     ldr W2, [X2]
     write_file X1, INPUT_ERROR_MESSAGE, X2
+    mov X0, #-1
     b exit
 
 skip_input_error:
-    open_file OUTPUT_FILE, O_CREAT+O_WRONLY
+    open_file OUTPUT_FILE, O_CREAT|O_WRONLY
     adds X12, XZR, X0   ; output fd
     b.pl skip_output_error
     mov X1, #1   ; stdout
@@ -25,6 +26,7 @@ skip_input_error:
     add X2, X2, OUTPUT_ERROR_SIZE@PAGEOFF
     ldr W2, [X2]
     write_file X1, OUTPUT_ERROR_MESSAGE, X2
+    mov X0, #-1
     b exit
 
 skip_output_error:
@@ -45,8 +47,9 @@ loop:
     flush_close X11
     flush_close X12
 
-exit:
     mov X0, XZR
+
+exit:
     mov X16, #SYS_exit
     svc #0x80
 
@@ -72,8 +75,8 @@ toupper:
     ret
 
 
-INPUT_FILE: .asciz "data.txt"
-OUTPUT_FILE: .asciz "data-upper.txt"
+INPUT_FILE: .asciz "main.S"
+OUTPUT_FILE: .asciz "main-upper.txt"
 INPUT_ERROR_MESSAGE: .asciz "Failed to open input file\n"
 INPUT_ERROR_SIZE: .word  .-INPUT_ERROR_MESSAGE
 OUTPUT_ERROR_MESSAGE: .asciz "Failed to open output file\n"
