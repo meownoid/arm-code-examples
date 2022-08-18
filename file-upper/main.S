@@ -7,8 +7,8 @@
 
 _start:
     open_file INPUT_FILE, O_RDONLY
-    adds X11, XZR, X0   ; input fd
-    b.pl skip_input_error
+    ; XNU private ABI: syscall error is reported in the carry flag
+    b.cc skip_input_error
     mov X1, #1   ; stdout
     adrp X2, INPUT_ERROR_SIZE@PAGE
     add X2, X2, INPUT_ERROR_SIZE@PAGEOFF
@@ -18,9 +18,11 @@ _start:
     b exit
 
 skip_input_error:
+    mov X11, X0   ; input fd
+
     open_file OUTPUT_FILE, O_CREAT|O_WRONLY
-    adds X12, XZR, X0   ; output fd
-    b.pl skip_output_error
+    ; XNU private ABI: syscall error is reported in the carry flag
+    b.cc skip_output_error
     mov X1, #1   ; stdout
     adrp X2, OUTPUT_ERROR_SIZE@PAGE
     add X2, X2, OUTPUT_ERROR_SIZE@PAGEOFF
@@ -30,6 +32,8 @@ skip_input_error:
     b exit
 
 skip_output_error:
+    mov X12, X0   ; output fd
+
 loop:
     read_file X11, BUFFER, BUFFER_LEN
     mov X13, X0   ; length read
