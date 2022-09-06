@@ -8,23 +8,23 @@
     stp X12, X13, [SP, #-16]!
     stp X14, X15, [SP, #-16]!
     stp X16, X17, [SP, #-16]!
-    stp X18, LR, [SP, #-16]!
+    stp XZR, LR, [SP, #-16]!
 
-    mov X0, #\reg
-    str X0, [SP, #-8]
+    sub SP, SP, #32
+
     mov X0, X\reg
     mov X1, X\reg
-    stp X0, X1, [SP, #-16]
-
-    mov X2, X\reg
-    mov X3, X\reg
-    mov X1, #\reg
-    add X1, X1, #'0'
+    stp X0, X1, [SP, #8]
+    mov X0, #\reg
+    add X0, X0, #'0'
+    str X0, [SP]
     adrp X0, formatString@PAGE
     add X0, X0, formatString@PAGEOFF
     bl _printf
 
-    ldp X18, LR, [SP], #16
+    add SP, SP, #32
+
+    ldp XZR, LR, [SP], #16
     ldp X16, X17, [SP], #16
     ldp X14, X15, [SP], #16
     ldp X12, X13, [SP], #16
@@ -46,13 +46,13 @@
     stp X12, X13, [SP, #-16]!
     stp X14, X15, [SP, #-16]!
     stp X16, X17, [SP, #-16]!
-    stp X18, LR, [SP, #-16]!
+    stp XZR, LR, [SP, #-16]!
 
     adrp X0, 1f@PAGE
     add X0, X0, 1f@PAGEOFF
     bl _printf
 
-    ldp X18, LR, [SP], #16
+    ldp XZR, LR, [SP], #16
     ldp X16, X17, [SP], #16
     ldp X14, X15, [SP], #16
     ldp X12, X13, [SP], #16
@@ -69,6 +69,6 @@
 .endm
 
 .data
-formatString: .asciz "X%c = %32ld, 0x016lx\n"
+formatString: .asciz "X%c = %32ld, 0x%016lx\n"
 .align 4
 .text
