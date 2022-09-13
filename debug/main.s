@@ -4,7 +4,7 @@
 .align 2
 
 main:
-    str LR, [SP, #-16]!
+    stp FP, LR, [SP, #-16]!
 
     mov X2, #0x0000000000000103
     mov X3, #0xFFFFFFFFFFFFFFFF
@@ -27,6 +27,7 @@ main:
     printRegister 6
     printRegister 7
 
+    ldp FP, LR, [SP], #16
+
     mov X0, #0
-    mov X16, #1
-    svc #0x80
+    ret
